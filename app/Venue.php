@@ -20,6 +20,11 @@ interface Venue
     public function getName(): string;
 
     /**
+     * @return string
+     */
+    public function getLocation(): string;
+
+    /**
      * @return \DateTime|null
      */
     public function getCreatedAt(): ?\DateTime;

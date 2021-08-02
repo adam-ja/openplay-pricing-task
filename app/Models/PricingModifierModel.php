@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-
 use App\PricingModifier;
 use Illuminate\Database\Eloquent\Model;
 use App\Traits\HasTimestampAccessors;
@@ -14,8 +13,9 @@ use Illuminate\Support\Collection;
  * @package App/Models
  * @property int $id
  * @property string $name
- * @property string $type
- * @property array $settings
+ * @property array $conditions
+ * @property string $adjustment_type
+ * @property float $adjustment_value
  * @property \DateTime|null $created_at
  * @property \DateTime|null $updated_at
  */
@@ -31,7 +31,7 @@ class PricingModifierModel extends Model implements PricingModifier
     /**
      * @var array
      */
-    protected $casts = ['settings' => 'array'];
+    protected $casts = ['conditions' => 'array'];
 
     /**
      * @inheritDoc
@@ -52,17 +52,25 @@ class PricingModifierModel extends Model implements PricingModifier
     /**
      * @inheritDoc
      */
-    public function getType(): string
+    public function getConditions(): array
     {
-        return $this->type;
+        return $this->conditions;
     }
 
     /**
      * @inheritDoc
      */
-    public function getSettings(): array
+    public function getAdjustmentType(): string
     {
-        return $this->settings;
+        return $this->adjustment_type;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getAdjustmentValue(): float
+    {
+        return $this->adjustment_value;
     }
 
     /**
@@ -76,10 +84,9 @@ class PricingModifierModel extends Model implements PricingModifier
     /**
      * @return BelongsToMany
      */
-    public function pricingOptions() : BelongsToMany
+    public function pricingOptions(): BelongsToMany
     {
         return $this->belongsToMany(PricingOptionModel::class)
             ->using(PricingOptionPricingModifierPivot::class);
     }
-
 }

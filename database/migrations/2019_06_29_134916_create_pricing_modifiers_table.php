@@ -16,8 +16,9 @@ class CreatePricingModifiersTable extends Migration
         Schema::create('pricing_modifiers', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name');
-            $table->string('type');
-            $table->json('settings');
+            $table->json('conditions');
+            $table->string('adjustment_type');
+            $table->float('adjustment_value');
             $table->timestamps();
         });
     }
