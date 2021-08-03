@@ -34,9 +34,8 @@ class Calculator
             $price = $this->modifierAdjustmentCalculator->calculatePrice($pricingOption->getPrice(), $modifier);
 
             $this->validModifiers[] = [
-                'id'    => $modifier->getId(),
-                'name'  => $modifier->getName(),
-                'price' => $price,
+                'modifier' => $modifier,
+                'price'    => $price,
             ];
 
             $bestPrice = min($bestPrice, $price);

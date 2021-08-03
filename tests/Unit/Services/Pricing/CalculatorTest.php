@@ -7,6 +7,7 @@ use App\Models\PricingModifierModel;
 use App\Models\PricingOptionModel;
 use App\Models\ProductModel;
 use App\Models\VenueModel;
+use App\PricingModifier;
 use App\Services\Pricing\Calculator;
 use App\Services\Pricing\ModifierAdjustmentCalculator;
 use App\Services\Pricing\ModifierConditionChecker;
@@ -97,18 +98,20 @@ class CalculatorTest extends TestCase
 
         $this->calculator->getBestPrice($this->product, $this->venue, $this->member);
 
-        $this->assertEquals([
-            [
-                'id'    => $modifier1->getId(),
-                'name'  => $modifier1->getName(),
-                'price' => 89.99,
-            ],
-            [
-                'id'    => $modifier3->getId(),
-                'name'  => $modifier3->getName(),
-                'price' => 74.99,
-            ]
-        ], $this->calculator->getValidModifiers());
+        $validModifiers = $this->calculator->getValidModifiers();
+
+        $this->assertCount(2, $validModifiers);
+        $this->assertIsArray($validModifiers[0]);
+        $this->assertArrayHasKey('modifier', $validModifiers[0]);
+        $this->assertInstanceOf(PricingModifier::class, $validModifiers[0]['modifier']);
+        $this->assertSame($modifier1->getId(), $validModifiers[0]['modifier']->getId());
+        $this->assertArrayHasKey('price', $validModifiers[0]);
+        $this->assertSame(89.99, $validModifiers[0]['price']);
+        $this->assertArrayHasKey('modifier', $validModifiers[1]);
+        $this->assertInstanceOf(PricingModifier::class, $validModifiers[1]['modifier']);
+        $this->assertSame($modifier3->getId(), $validModifiers[1]['modifier']->getId());
+        $this->assertArrayHasKey('price', $validModifiers[1]);
+        $this->assertSame(74.99, $validModifiers[1]['price']);
     }
 
     private function mockModifierConditionsMet(PricingModifierModel $modifier, bool $conditionsMet = true): void
