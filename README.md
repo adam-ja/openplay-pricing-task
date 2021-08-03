@@ -1,5 +1,11 @@
 # Submission
 
+## Running the code
+
+- Follow the setup steps from the original task instructions.
+- The three classes that make up my simple pricing engine are covered by unit tests, and there is also a basic integration test covering the three example scenarios suggested in the original task. All can be run with `vendor/bin/sail test`.
+- I have created a simple CLI command to demonstrate other scenarios. This can be run with `vendor/bin/sail artisan price:calculate`. By default, it will select a random product, venue, and member from the seeded database and calculate the best price for this combination. However, you can specify any or all of these entities by passing the ID as an option. See `vendor/bin/sail artisan price:calculate --help` for full usage instructions.
+
 ## Decisions/notes
 
 - I changed the schema/model for the pricing modifier to better fit my approach. The separate `type` column didn't seem particularly useful as the rules for applying each modification can be determined from the other columns, so this has been removed. The `settings` JSON column has been split out into:
